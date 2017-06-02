@@ -24,6 +24,8 @@ float inTemp, outTemp;                                    //variables for temper
 void setup() {
   Serial.begin(115200);
   sensors.begin();
+  pinMode(ledPin, OUTPUT);
+  pinMode(10, OUTPUT);
 
   Serial.print("Initializing SD card...");
   if(!SD.begin(chipSelect))                                 //attempt to start SD communication
