@@ -38,7 +38,7 @@ void setup() {
         break;                                              //Exit the for loop now that we have a file
       }
     }
-    Serial.println("No available file names; clear SD card to enable logging");
+    if (!SDactive) Serial.println("No available file names; clear SD card to enable logging");
   }
   
   mag.initialize(); //initializes mag sensor settings
