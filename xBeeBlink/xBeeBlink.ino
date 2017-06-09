@@ -1,3 +1,8 @@
+/*   Code to control the activity of an LED via xBee communication and transmit basic data back
+ *   Author: Ryan Bowers
+ *   For use with Introduction to Arduino Activity 10
+ */
+
 #include <SoftwareSerial.h>
 
 #define led 13
@@ -17,10 +22,14 @@ void loop() {
   while (xBee.available() > 1) {
     command += xBee.read();
   }
-  if (command.equals("ON")) 
-    ledOn();
-  else if (command.equals("OFF"))
-    ledOff();
+  if (command.equals("FLIP")) {
+    if (isOn) ledOff();
+    else ledOn();
+  }
+  else if ((command.substring(0,2)).equals("BL")) {
+    byte times = (command.substring(2, command.length())).toInt();
+    ledBlink(times);
+  }
   else if (command.equals("TIME"))
     xBee.println("Time on (s): " + String(timeOn/1000.0, 3));
   else if (command.equals("NUM"))
