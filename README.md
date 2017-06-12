@@ -14,3 +14,11 @@ https://docs.google.com/presentation/d/1eIsCDgpDu-nCz0vGucmX006oPLuZxcmLnavc_X0p
 8. SDTempBus - introduces bus communication using OneWire protocol
 9. GPSLogger - switch from computer tether to battery power, logs position of arduino
 10. XBeeBlink - led blinking sketch that accepts input over xBee, allowing remote control of arduino
+
+## Libraries required:
+- [ADXL345](https://github.com/sparkfun/SparkFun_ADXL345_Arduino_Library)
+- [MPL3115A](https://github.com/sparkfun/MPL3115A2_Breakout)
+- [MAG3110](https://github.com/sparkfun/SparkFun_MAG3110_Breakout_Board_Arduino_Library)
+- [OneWire](https://github.com/PaulStoffregen/OneWire)
+- [DallasTemperature](https://github.com/milesburton/Arduino-Temperature-Control-Library)
+- [TinyPGS](https://github.com/mikalhart/TinyGPS)
