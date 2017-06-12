@@ -1,9 +1,9 @@
-#Introduction to Arduino
+# Introduction to Arduino
 
 This repository contains code for the exercises in the MNSGC Introduction to Arduino tutorial, which can be found here:
 https://docs.google.com/presentation/d/1eIsCDgpDu-nCz0vGucmX006oPLuZxcmLnavc_X0pgl8/edit?usp=sharing
 
-##Exercises currently included in this tutorial:
+## Exercises currently included in this tutorial:
 1. BasicBlink - a simple program to blink an led repeatedly, introducing basic sketch layout
 2. Sweep - introduces objects and built-in libraries by driving a servo
 3. AnalogPressure - introduces reading sensors, starting with a raw analog pressure sensor
