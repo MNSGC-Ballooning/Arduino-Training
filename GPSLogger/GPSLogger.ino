@@ -43,8 +43,8 @@ void setup() {
   else {                                                    //if successful, attempt to create file
     Serial.println("Card initialized.\nCreating File...");
     for (byte i = 0; i < 100; i++) {                        //can create up to 100 files with similar names, but numbered differently
-      filename[6] = char(i/10);
-      filename[7] = char(i%10);
+      filename[6] = '0' + i/10;
+      filename[7] = '0' + i%10;
       if (!SD.exists(filename)) {                           //if a given filename doesn't exist, it's available
         datalog = SD.open(filename, FILE_WRITE);            //create file with that name
         SDactive = true;                                    //activate SD logging since file creation was successful
