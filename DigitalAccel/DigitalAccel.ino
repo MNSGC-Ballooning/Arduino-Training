@@ -1,4 +1,4 @@
-/*  Code to print acceleration measurements from 3-axis accelerometer (Sparkfun ADXL345). Values are in g's.
+/*  Code to print acceleration measurements from 3-axis accelerometer (Sparkfun ADXL345). Values are in ft/s^2.
  *  Author: Ryan Bowers
  *  For use with Intro to Arduino Training Activity 5
  */
