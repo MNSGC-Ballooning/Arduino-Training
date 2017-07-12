@@ -5,44 +5,66 @@
 
 #include <SoftwareSerial.h>
 
-#define led 13
+#define ledPin 13
+#define relayPin 7
 
 SoftwareSerial xBee = SoftwareSerial(2,3);  //Pins to communicate with xBee
 unsigned int numberOn = 0;  //variables to track system activity
 unsigned long timeOn = 0, turnedOn;
 bool isOn = false;
+bool relay = false;
 
 void setup() {
-  pinMode(led, OUTPUT);
+  pinMode(relayPin, INPUT_PULLUP);
   xBee.begin(9600);
+  if (digitalRead(relayPin) == LOW) {     //ground pin 7 before startup to put the Arduino in Relay Mode
+    relay = true;
+    Serial.begin(115200);                 //This opens the Serial line to the computer
+    Serial.println("Relay Mode active");  //Tell user that this was done successfully
+  }
+  else
+    pinMode(ledPin, OUTPUT);
 }
 
 void loop() {
-  String command = "";            //start with an empty string
-  while (xBee.available() > 0) {
-    command += char(xBee.read()); //add to it char by char when receiving xBee transmissions
-    delay(10);                    //wait briefly for more data to arrive before checking
+  //Loop for relay system
+  if (relay) {
+    //Just pipe data from computer to xBee and vice versa
+    while (Serial.available() > 0) {
+      xBee.write(Serial.read());
+    }
+    while (xBee.available() > 0) {
+      Serial.write(xBee.read());
+    }
   }
-  if (command.equals("FLIP")) {   //toggle command
-    if (isOn) ledOff();
-    else ledOn();
+  //Loop for payload system
+  else {
+    String command = "";            //start with an empty string
+    while (xBee.available() > 0) {
+      command += char(xBee.read()); //add to it char by char when receiving xBee transmissions
+      delay(10);                    //wait briefly for more data to arrive before checking
+    }
+    if (command.equals("FLIP")) {   //toggle command
+      if (isOn) ledOff();
+      else ledOn();
+    }
+    else if ((command.substring(0,2)).equals("BL")) { //blink command
+      byte times = (command.substring(2, command.length())).toInt();  //check to see how many times to blink
+      ledBlink(times);
+    }
+    else if (command.equals("TIME"))  //report total time on command
+      xBee.println("\nTime on (s): " + String(getTimeOn(), 3));
+    else if (command.equals("NUM"))   //report times turned on command
+      xBee.println("\nTurned on " + String(numberOn) + " times.");
+    else if (!command.equals(""))     //if a command was received, but not one of the above, display an error
+      xBee.println("\nError - " + command + ": Command not recognized");
   }
-  else if ((command.substring(0,2)).equals("BL")) { //blink command
-    byte times = (command.substring(2, command.length())).toInt();  //check to see how many times to blink
-    ledBlink(times);
-  }
-  else if (command.equals("TIME"))  //report total time on command
-    xBee.println("\nTime on (s): " + String(getTimeOn(), 3));
-  else if (command.equals("NUM"))   //report times turned on command
-    xBee.println("\nTurned on " + String(numberOn) + " times.");
-  else if (!command.equals(""))     //if a command was received, but not one of the above, display an error
-    xBee.println("\nError - " + command + ": Command not recognized");
 }
 
 //turns led on and saves time and number
 void ledOn() {
   if (!isOn) {
-    digitalWrite(led, HIGH);
+    digitalWrite(ledPin, HIGH);
     turnedOn = millis();
     isOn = true;
     numberOn++;
@@ -52,7 +74,7 @@ void ledOn() {
 //turns led off and adds time to total
 void ledOff() {
   if (isOn) {
-    digitalWrite(led, LOW);
+    digitalWrite(ledPin, LOW);
     timeOn += millis() - turnedOn;
     isOn = false;
   }
