@@ -19,8 +19,9 @@ void setup() {
 
 void loop() {
   String command = "";
-  while (xBee.available() > 1) {
-    command += xBee.read();
+  while (xBee.available() > 0) {
+    command += char(xBee.read());
+    delay(10);
   }
   if (command.equals("FLIP")) {
     if (isOn) ledOff();
@@ -31,11 +32,11 @@ void loop() {
     ledBlink(times);
   }
   else if (command.equals("TIME"))
-    xBee.println("Time on (s): " + String(timeOn/1000.0, 3));
+    xBee.println("\nTime on (s): " + String(timeOn/1000.0, 3));
   else if (command.equals("NUM"))
-    xBee.println("Turned on " + String(numberOn) + " times.");
+    xBee.println("\nTurned on " + String(numberOn) + " times.");
   else if (!command.equals(""))
-    xBee.println("Error - " + command + ": Command not recognized");
+    xBee.println("\nError - " + command + ": Command not recognized");
 }
 
 void ledOn() {
