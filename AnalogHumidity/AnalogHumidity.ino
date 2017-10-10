@@ -17,7 +17,7 @@ void setup()
 {
   Serial.begin(115200); // Opens the communication between Arduino and computer serial port
   Serial.println("Relative humidity in % measured with analog humidity sensor:"); // Print header
-  digitalWrite(LEDpin, OUTPUT);
+  pinMode(LEDpin, OUTPUT);
 }
 
 

@@ -17,7 +17,7 @@ void setup()
 {
   Serial.begin(115200); // Opens the communication between Arduino and computer serial port
   Serial.println("Pressure in psi measured with analog pressure sensor:"); // Print header
-  digitalWrite(LEDpin, OUTPUT);
+  pinMode(LEDpin, OUTPUT);
 }
 
 
