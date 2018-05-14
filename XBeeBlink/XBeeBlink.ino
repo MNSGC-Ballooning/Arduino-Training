@@ -3,12 +3,16 @@
  *   For use with Introduction to Arduino Activity 10
  */
 
-#include <SoftwareSerial.h>
+#include <Relay_XBee.h>
 
 #define ledPin 13
 #define relayPin 7
 
-SoftwareSerial xBee = SoftwareSerial(2,3);  //Pins to communicate with xBee
+String ID = "ID";   //Choose an ID for your XBee - 2-4 character string, A-Z and 0-9 only please
+
+SoftwareSerial ss = SoftwareSerial(2,3);  //Pins to communicate with xBee
+XBee xBee = XBee(&ss, ID);                    //XBee object - connect to serial line
+
 unsigned int numberOn = 0;  //variables to track system activity
 unsigned long timeOn = 0, turnedOn;
 bool isOn = false;
@@ -29,21 +33,20 @@ void setup() {
 void loop() {
   //Loop for relay system
   if (relay) {
-    //Just pipe data from computer to xBee and vice versa
+    //Just pipe data from computer to xBee and vice versa (ignore xBee object)
     while (Serial.available() > 0) {
-      xBee.write(Serial.read());
+      ss.write(Serial.read());
     }
-    while (xBee.available() > 0) {
-      Serial.write(xBee.read());
+    while (ss.available() > 0) {
+      Serial.write(ss.read());
     }
   }
   //Loop for payload system
   else {
-    String command = "";            //start with an empty string
-    while (xBee.available() > 0) {
-      command += char(xBee.read()); //add to it char by char when receiving xBee transmissions
-      delay(10);                    //wait briefly for more data to arrive before checking
-    }
+    String command = xBee.receive();  //check xBee for incoming messages that mach ID
+    if (command == "") return;                  //Either no data was received or ID didn't match
+
+    //Command responses
     if (command.equals("FLIP")) {   //toggle command
       if (isOn) ledOff();
       else ledOn();
@@ -53,11 +56,11 @@ void loop() {
       ledBlink(times);
     }
     else if (command.equals("TIME"))  //report total time on command
-      xBee.println("\nTime on (s): " + String(getTimeOn(), 3));
+      xBee.send("\nTime on (s): " + String(getTimeOn(), 3));
     else if (command.equals("NUM"))   //report times turned on command
-      xBee.println("\nTurned on " + String(numberOn) + " times.");
+      xBee.send("\nTurned on " + String(numberOn) + " times.");
     else if (!command.equals(""))     //if a command was received, but not one of the above, display an error
-      xBee.println("\nError - " + command + ": Command not recognized");
+      xBee.send("\nError - " + command + ": Command not recognized");
   }
 }
 
