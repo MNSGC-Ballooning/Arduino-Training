@@ -1,33 +1,26 @@
 #include <SD.h>
 #include <SoftwareSerial.h>
-#include <TinyGPS.h>
+#include <FlightGPS.h>
 
 #define redLED 3
 #define greenLED 4
 #define chipSelect 8  //Sparkfun
 //#define chipSelect 10 //Adafruit
 
-//variables for storing gps data
-float lat, lon, alt;
-int sats, year;
-byte month, day, hour, minute, second, hundredth;
-unsigned long fixAge;
-
 File datalog;                     //File object for datalogging
 char filename[] = "GPSLOG00.csv"; //Template for file name to save data
 bool SDactive = false;            //used to check for SD card before attempting to log
 
-TinyGPS gps;              //gps object
-SoftwareSerial ss(5, 6);  //extra serial line to get data from gps
-unsigned long timer = 0;  //used to keep track of datalog cycles
-bool newData = false;     //becomes true when gps object processes new data
+SoftwareSerial ss(5, 6);        //extra serial line to get data from gps
+FlightGPS gps = FlightGPS(&ss); //GPS object - connect to serial line
+unsigned long timer = 0;        //used to keep track of datalog cycles
 
 void setup() {
   Serial.begin(115200);   //start serial communication
-  ss.begin(9600);         //start gps communication
+  gps.initialize();       //start gps communication
   pinMode(redLED, OUTPUT);
   pinMode(greenLED, OUTPUT);
-  pinMode(10, OUTPUT);
+  pinMode(10, OUTPUT);    //This always needs to be an output when using SD
 
   Serial.print("Initializing SD card...");
   if(!SD.begin(chipSelect)) {                               //attempt to start SD communication
@@ -73,23 +66,16 @@ void setup() {
 }
 
 void loop() {
-  bool newData = false;
-  while(ss.available() > 0) {   //if there's data on the gps serial line, read and process it
-    if(gps.encode(ss.read())) {
-      newData = true;
-    }
-  }
-  if (newData) {                //if new data is processed, save it to program variables
-    gps.f_get_position(&lat, &lon, &fixAge);
-    alt = gps.f_altitude();
-    gps.crack_datetime(&year, &month, &day, &hour, &minute, &second, &hundredth, &fixAge);
-    sats = gps.satellites();
-  }
+  gps.update();   //check for incoming gps strings and parse them for data
+  
   if (millis() - timer > 1000) {  //log data once per second. This is a more accurate method than delay(), as it includes
     timer = millis();             //time taken for the program to execute, but requires a bit of setup
-    String data = String(month) + "/" + String(day) + "/" + String(year) + ",";
-    data += String(hour) + ":" + String(minute) + ":" + String(second) + ",";
-    data += String(lat, 4) + "," + String(lon, 4) + "," + String(alt, 1) + "," + String(sats) + ",";
+    
+    //All data is returned as numbers (int or float as appropriate), so values must be converted to strings before logging
+    String data = String(gps.getMonth()) + "/" + String(gps.getDay()) + "/" + String(gps.getYear()) + ","
+                  + String(gps.getHour()) + ":" + String(gps.getMinute()) + ":" + String(gps.getSecond()) + ","
+                  + String(gps.getLat(), 4) + "," + String(gps.getLon(), 4) + "," + String(gps.getAlt(), 1) + ","
+                  + String(gps.getSats());
     digitalWrite(greenLED, HIGH); //flasch green LED briefly when writing data
     Serial.println(data);
     if (SDactive) {
