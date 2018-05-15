@@ -17,7 +17,7 @@ https://docs.google.com/presentation/d/1eIsCDgpDu-nCz0vGucmX006oPLuZxcmLnavc_X0p
 
 ## Libraries required:
 - [ADXL345](https://github.com/sparkfun/SparkFun_ADXL345_Arduino_Library)
-- [MPL3115A](https://github.com/sparkfun/MPL3115A2_Breakout)
+- [MPL3115A](https://github.com/sparkfun/SparkFun_MPL3115A2_Breakout_Arduino_Library)
 - [MAG3110](https://github.com/sparkfun/SparkFun_MAG3110_Breakout_Board_Arduino_Library)
 - [OneWire](https://github.com/PaulStoffregen/OneWire)
 - [DallasTemperature](https://github.com/milesburton/Arduino-Temperature-Control-Library)
