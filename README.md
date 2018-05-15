@@ -22,3 +22,5 @@ https://docs.google.com/presentation/d/1eIsCDgpDu-nCz0vGucmX006oPLuZxcmLnavc_X0p
 - [OneWire](https://github.com/PaulStoffregen/OneWire)
 - [DallasTemperature](https://github.com/milesburton/Arduino-Temperature-Control-Library)
 - [TinyGPS](https://github.com/mikalhart/TinyGPS)
+- [FlightGPS](https://github.com/MNSGC-Ballooning/FlightGPS)
+- [Relay_XBee](https://github.com/MNSGC-Ballooning/Relay_XBee)
