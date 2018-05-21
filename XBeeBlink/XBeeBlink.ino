@@ -11,7 +11,7 @@
 String ID = "ID";   //Choose an ID for your XBee - 2-4 character string, A-Z and 0-9 only please
 
 SoftwareSerial ss = SoftwareSerial(2,3);  //Pins to communicate with xBee
-XBee xBee = XBee(&ss, ID);                    //XBee object - connect to serial line
+XBee xBee = XBee(&ss, ID, 'A');           //XBee object - connect to serial line
 
 unsigned int numberOn = 0;  //variables to track system activity
 unsigned long timeOn = 0, turnedOn;
@@ -20,10 +20,15 @@ bool relay = false;
 
 void setup() {
   pinMode(relayPin, INPUT_PULLUP);
-  xBee.begin(9600);
+  xBee.initialize();
   if (digitalRead(relayPin) == LOW) {     //ground pin 7 before startup to put the Arduino in Relay Mode
     relay = true;
-    Serial.begin(115200);                 //This opens the Serial line to the computer
+    xBee.enterATmode();       //Configure XBee as a relay
+    xBee.atCommand("ATDL1");
+    xBee.atCommand("ATMY0");
+    xBee.exitATmode();
+
+    Serial.begin(9600);                 //This opens the Serial line to the computer
     Serial.println("Relay Mode active");  //Tell user that this was done successfully
   }
   else
@@ -44,7 +49,7 @@ void loop() {
   //Loop for payload system
   else {
     String command = xBee.receive();  //check xBee for incoming messages that mach ID
-    if (command == "") return;                  //Either no data was received or ID didn't match
+    if (command == "") return;        //Either no data was received or ID didn't match
 
     //Command responses
     if (command.equals("FLIP")) {   //toggle command
