@@ -11,13 +11,14 @@ File datalog;                     //File object for datalogging
 char filename[] = "GPSLOG00.csv"; //Template for file name to save data
 bool SDactive = false;            //used to check for SD card before attempting to log
 
-SoftwareSerial ss(5, 6);        //extra serial line to get data from gps
-FlightGPS gps = FlightGPS(&ss); //GPS object - connect to serial line
+SoftwareSerial gps_ser(5, 6);        //extra serial line to get data from gps
+FlightGPS gps = FlightGPS(&gps_ser); //GPS object - connect to serial line
 unsigned long timer = 0;        //used to keep track of datalog cycles
 
 void setup() {
   Serial.begin(115200);   //start serial communication
-  gps.initialize();       //start gps communication
+  gps_ser.begin(ADAFRUIT_BAUD); //start gps communication
+  gps.init();       //gps setup
   pinMode(redLED, OUTPUT);
   pinMode(greenLED, OUTPUT);
   pinMode(10, OUTPUT);    //This always needs to be an output when using SD
@@ -74,7 +75,7 @@ void loop() {
     //All data is returned as numbers (int or float as appropriate), so values must be converted to strings before logging
     String data = String(gps.getMonth()) + "/" + String(gps.getDay()) + "/" + String(gps.getYear()) + ","
                   + String(gps.getHour()) + ":" + String(gps.getMinute()) + ":" + String(gps.getSecond()) + ","
-                  + String(gps.getLat(), 4) + "," + String(gps.getLon(), 4) + "," + String(gps.getAlt(), 1) + ","
+                  + String(gps.getLat(), 4) + "," + String(gps.getLon(), 4) + "," + String(gps.getAlt_meters(), 1) + ","
                   + String(gps.getSats());
     digitalWrite(greenLED, HIGH); //flasch green LED briefly when writing data
     Serial.println(data);
