@@ -3,15 +3,16 @@
  *   For use with Introduction to Arduino Activity 10
  */
 
-#include <Relay_XBee.h>
+#include <SoftwareSerial.h>
+#include <RelayXBee.h>
 
 #define ledPin 13
 #define relayPin 7
 
 String ID = "ID";   //Choose an ID for your XBee - 2-4 character string, A-Z and 0-9 only please
 
-SoftwareSerial ss = SoftwareSerial(2,3);  //Pins to communicate with xBee
-XBee xBee = XBee(&ss, ID, 'A');           //XBee object - connect to serial line
+SoftwareSerial xBee_ser = SoftwareSerial(2,3);  //Pins to communicate with xBee
+RelayXBee xBee = RelayXBee(&xBee_ser, ID);           //XBee object - connect to serial line
 
 unsigned int numberOn = 0;  //variables to track system activity
 unsigned long timeOn = 0, turnedOn;
@@ -20,7 +21,8 @@ bool relay = false;
 
 void setup() {
   pinMode(relayPin, INPUT_PULLUP);
-  xBee.initialize();
+  xBee_ser.begin(XBEE_BAUD);
+  xBee.init('A');
   if (digitalRead(relayPin) == LOW) {     //ground pin 7 before startup to put the Arduino in Relay Mode
     relay = true;
     xBee.enterATmode();       //Configure XBee as a relay
@@ -40,10 +42,10 @@ void loop() {
   if (relay) {
     //Just pipe data from computer to xBee and vice versa (ignore xBee object)
     while (Serial.available() > 0) {
-      ss.write(Serial.read());
+      xBee_ser.write(Serial.read());
     }
-    while (ss.available() > 0) {
-      Serial.write(ss.read());
+    while (xBee_ser.available() > 0) {
+      Serial.write(xBee_ser.read());
     }
   }
   //Loop for payload system
@@ -63,7 +65,7 @@ void loop() {
     else if (command.equals("TIME"))  //report total time on command
       xBee.send("\nTime on (s): " + String(getTimeOn(), 3));
     else if (command.equals("NUM"))   //report times turned on command
-      xBee.send("\nTurned on " + String(numberOn) + " times.");
+      xBee.send("\nTurned on " + String(numberOn) + " times");
     else if (!command.equals(""))     //if a command was received, but not one of the above, display an error
       xBee.send("\nError - " + command + ": Command not recognized");
   }
