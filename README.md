@@ -21,6 +21,6 @@ https://docs.google.com/presentation/d/1eIsCDgpDu-nCz0vGucmX006oPLuZxcmLnavc_X0p
 - [MAG3110](https://github.com/sparkfun/SparkFun_MAG3110_Breakout_Board_Arduino_Library)
 - [OneWire](https://github.com/PaulStoffregen/OneWire)
 - [DallasTemperature](https://github.com/milesburton/Arduino-Temperature-Control-Library)
-- [TinyGPS](https://github.com/mikalhart/TinyGPS)
+- [TinyGPSPlus](https://github.com/mikalhart/TinyGPSPlus)
 - [FlightGPS](https://github.com/MNSGC-Ballooning/FlightGPS)
 - [XBee](https://github.com/MNSGC-Ballooning/XBee)
