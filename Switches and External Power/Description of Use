@@ -1,0 +1,10 @@
+This is the introduction to the switches for the breadboard and the external power for the Arduino.
+
+Slide Switch-
+The slide switch is a three-prong switch with a slider on top. The middle prong of the switch is the input prong, where all the current goes in to. The outer two prongs are the output prongs, with the switch deciding which prong is currently the output. The way to tell which prong is outputting is that the output prong is on the same side the switch is on.
+
+Four-Prong Tactile Switch-
+This switch consists of four prongs with a button in the middle. The four prongs are actually two parallel metal strips, allowing the current to flow freely through the metal strip, with the button connecting the two parallel strips only while pressed. The way to tell which prongs are connected is by looking at which side the prongs come out of. The four prongs come out of two sides of the square, with two of the prongs coming out of what could be considered the “upper half”, and two prongs coming out of the “lower half”. This is also how the strips are arranged, where the two prongs on the “upper half” are one strip, and the two prongs on the “lower half” are the other strip.
+
+External Power for the Arduino-
+The “Vin” port on the Arduino allows for an external power to be wired into the Arduino, rather than having to use one of the two bulkier ports on the component. On the Arduino website, the input voltage recommended is 7 to 12 Volts, with the input voltage limit being anywhere from 6 to 20 Volts. It is also worth noting that the Arduino does not discriminate on where the power is coming from, so if you had the “Vin” port wired up, you could plug in your laptop to the Arduino, load whatever code you wanted to, unplug your laptop, and there would be no effect on the Arduino.
