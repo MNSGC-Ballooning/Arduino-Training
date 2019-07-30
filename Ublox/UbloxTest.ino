@@ -1,9 +1,9 @@
 #include <UbloxGPS.h>
 #include <SoftwareSerial.h>
 
-SoftwareSerial gpsSer(2,3);
+SoftwareSerial gpsSer(2,3); //Do not include if using teensy
 
-UbloxGPS gps = UbloxGPS(&gpsSer);
+UbloxGPS gps = UbloxGPS(&gpsSer); //Or &Serial1 if using teensy
 boolean fixU = false;
 
 String data;
@@ -12,7 +12,7 @@ void setup() {
   //Start serial
   Serial.begin(9600);
   //Start ublox
-  gpsSer.begin(UBLOX_BAUD);
+  gpsSer.begin(UBLOX_BAUD); //Serial1.begin(UBLOX.BAUD);
   
   while(!Serial){
     ; //Wait for serial port to connect
