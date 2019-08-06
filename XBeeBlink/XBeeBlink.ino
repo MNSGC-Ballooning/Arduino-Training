@@ -30,7 +30,7 @@ void setup() {
     xBee.atCommand("ATMY0");
     xBee.exitATmode();
 
-    Serial.begin(115200);                 //Open the Serial line to the computer
+    Serial.begin(9600);                 //Open the Serial line to the computer
     Serial.println("Relay Mode active");  //Tell user that this was done successfully
   }
   else
@@ -50,7 +50,9 @@ void loop() {
   }
   //Loop for payload system
   else {
-    String command = xBee.receive();  //check xBee for incoming messages that match ID
+    if(xBee_ser.available()>0){
+      String command = xBee.receive();
+    //check xBee for incoming messages that match ID
     if (command == "") return;        //Either no data was received or ID didn't match
 
     //Command responses
@@ -69,7 +71,7 @@ void loop() {
     else if (!command.equals(""))     //if a command was received, but not one of the above, display an error
       xBee.send("\nError - " + command + ": Command not recognized");
   }
-}
+}}
 
 //turns led on and saves time and number
 void ledOn() {
