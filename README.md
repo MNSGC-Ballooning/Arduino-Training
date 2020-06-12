@@ -24,3 +24,5 @@ https://docs.google.com/presentation/d/1eIsCDgpDu-nCz0vGucmX006oPLuZxcmLnavc_X0p
 - [TinyGPSPlus](https://github.com/mikalhart/TinyGPSPlus)
 - [FlightGPS](https://github.com/MNSGC-Ballooning/FlightGPS)
 - [XBee](https://github.com/MNSGC-Ballooning/XBee)
+- [arduino-ms5xxx](https://github.com/Schm1tz1/arduino-ms5xxx)
+- [SparkFun_Micro_OLED_Arduino_Library](https://github.com/sparkfun/SparkFun_Micro_OLED_Arduino_Library)
