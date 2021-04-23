@@ -33,8 +33,16 @@ void setup() {
     Serial.begin(9600);                 //Open the Serial line to the computer
     Serial.println("Relay Mode active");  //Tell user that this was done successfully
   }
-  else
+  else {
     pinMode(ledPin, OUTPUT);
+    xBee.enterATmode();      //Configure XBee as a reciever
+    xBee.atCommand("ATDL0"); //The DL and MY values of XBees that talk to each other should be inverted
+    xBee.atCommand("ATMY1"); //Note how these are the reverse of the above settings for the relay unit
+    xBee.exitATmode();
+
+    Serial.begin(9600);
+    Serial.println("Reciever Mode active");
+  }
 }
 
 void loop() {
