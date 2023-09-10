@@ -21,18 +21,18 @@ float logR;
 float T;  // these three variables are used for the calculation from adc value to temperature
 
 
+#define ledPin 5
+#define tempPin A2 //pin that the thermistor should be read from
+
 void setup() {
   Serial.begin(9600);     //start Serial communication
   pinMode(ledPin, OUTPUT);  //setup LED pin
-                            //Thermistor.begin(10); //12 bits of analog resolution on arduino nano 33
-
 
   String header = "Temp (C),Temp(F)";  //setup data format, and print it to the monitor and SD card
   Serial.println(header);
 }
 
 void loop() {
-
 
   String data = String(getTempC());  //get temp and write to data string
   data = data + "," + String(getTempF());
@@ -42,6 +42,7 @@ void loop() {
   delay(250);                  //have LED blink for quarter-second
   digitalWrite(ledPin, LOW);   //then turn it off
   delay(750);                  //complete a full second cycle before logging again
+ 
 }
 
 //function to read the temp sensor and return the current temp in F
@@ -65,3 +66,4 @@ void update() {
   currentTempC = T - 273.15;  // converting to celcius
   currentTempF = currentTempC * 9 / 5 + 32;
 }
+

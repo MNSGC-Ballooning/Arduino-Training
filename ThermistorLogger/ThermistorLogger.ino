@@ -9,6 +9,7 @@
 
 #define ledPin 5
 #define tempPin A2 //pin that the thermistor should be read from
+
 int analogResolution = 10;  //10 for arduino uno
 int currentTempC = -99;
 int currentTempF = -99;
@@ -22,11 +23,9 @@ float adcVal;
 float logR;
 float T;  // these three variables are used for the calculation from adc value to temperature
 
-
 File datalog;                     //File object for datalogging
 char filename[] = "LOGGER00.csv"; //Template for file name to save data
 bool SDactive = false;            //used to check for SD card before attempting to log
-
 
 void setup() {
   Serial.begin(115200);     //start Serial communication
@@ -52,8 +51,6 @@ void setup() {
     if (!SDactive) Serial.println("No available file names; clear SD card to enable logging");
   }
   
-  
-
   String header = "Temp (C),Temp(F)";  //setup data format, and print it to the monitor and SD card
   Serial.println(header);
   if (SDactive) {
@@ -102,3 +99,4 @@ void update() {
   currentTempC = T - 273.15;  // converting to celcius
   currentTempF = currentTempC * 9 / 5 + 32;
 }
+
